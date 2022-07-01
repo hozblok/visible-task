@@ -1,0 +1,26 @@
+events {}
+
+http {
+    sendfile on;
+    tcp_nopush on;
+    tcp_nodelay on;
+    keepalive_timeout 65;
+    types_hash_max_size 2048;
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+
+    server {
+        listen ${NGINX_PORT};
+        server_name localhost;
+
+        location ~ ^/api/(.*)$ {
+            rewrite /api/(.*) /$1 break;
+            proxy_pass http://crawler-service:8000;
+            proxy_http_version 1.1;
+        }
+
+        location / {
+            alias /app/;
+        }
+    }
+}

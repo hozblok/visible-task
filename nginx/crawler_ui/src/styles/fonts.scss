@@ -1,0 +1,38 @@
+@font-face {
+    font-family: 'Short Stack';
+    font-style: normal;
+    font-weight: normal;
+    src: url('../assets/fonts/ShortStack.eot');
+    src: local('Short Stack'), local('ShortStack'),
+        url('../assets/fonts/ShortStack.eot?#iefix') format('embedded-opentype'),  /* IE6-IE8 */
+        url('../assets/fonts/ShortStack.woff2') format('woff2'), /* Super Modern Browsers */
+        url('../assets/fonts/ShortStack.woff') format('woff'), /* Modern Browsers */
+        url('../assets/fonts/ShortStack.ttf') format('truetype'); /* Safari, Android, iOS */
+}
+
+@font-face {
+    font-family: "DejaVu Sans";
+    font-style: normal;
+    font-weight: normal;
+    src: url("../assets/fonts/DejaVuSans.eot");
+    src: local('DejaVu Sans'), local('DejaVuSans'),
+        url("../assets/fonts/DejaVuSans.eot?#iefix") format("embedded-opentype"),
+        url("../assets/fonts/DejaVuSans.woff2") format("woff2"),
+        url("../assets/fonts/DejaVuSans.woff") format("woff"),
+        url("../assets/fonts/DejaVuSans.ttf") format("truetype"),
+        url("../assets/fonts/DejaVuSans.svg#DejaVu Sans") format("svg");
+}
+
+
+@font-face {
+    font-family: "Unicorn Scribbles";
+    font-style: normal;
+    font-weight: normal;
+    src: url("../assets/fonts/UnicornScribbles.eot");
+    src:  local('Unicorn Scribbles'), local('UnicornScribbles'),
+        url("../assets/fonts/UnicornScribbles.eot?#iefix") format("embedded-opentype"),
+        url("../assets/fonts/UnicornScribbles.woff2") format("woff2"),
+        url("../assets/fonts/UnicornScribbles.woff") format("woff"),
+        url("../assets/fonts/UnicornScribbles.ttf") format("truetype"),
+        url("../assets/fonts/UnicornScribbles.svg#Unicorn Scribbles") format("svg");
+}

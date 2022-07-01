@@ -1,0 +1,32 @@
+version: "3"
+
+services:
+  mysql:
+    ports: ["3306:3306"]
+  rabbitmq:
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  crawler-service-test:
+    image: crawler-service
+    container_name: crawler-service-test
+    build:
+      context: ./crawler_service
+      target: crawler_service_test
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_SERVER: ${POSTGRES_SERVER}
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+      RABBITMQ_HOST: ${RABBITMQ_HOST}
+    restart: always
+    ports: [ "8000:8000" ]
+    command: python -m uvicorn main:api --workers=2 --host 0.0.0.0 --port 8000
+    depends_on:
+      - postgres
+      - rabbitmq
+    volumes:
+      - ./crawler_service:/visible
