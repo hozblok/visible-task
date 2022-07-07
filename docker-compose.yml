@@ -14,29 +14,19 @@ services:
     volumes:
       - ./postgres_volume:/var/lib/postgresql/data
 
-  adminer:
-    image: adminer
-    container_name: adminer
-    restart: always
-    ports:
-      - 8001:8080
-
   nginx:
     image: nginx
     container_name: nginx
     build:
-        context: ./nignx
+      context: ./nignx
     volumes:
       - ./nginx/templates:/etc/nginx/templates
+      # TODO: Delete me after adding a build process inside this container.
       - ./nginx/crawler_ui/build:/app
-    ports:
-      - "8080:80"
+    ports: [ "8080:80" ]
     environment:
       NGINX_PORT: "80"
-      NGINX_RESPONSE: "'Hi! It is NGINX!'"
       NGINX_ENVSUBST_OUTPUT_DIR: "/etc/nginx"
-    # depends_on:
-    #   - crawler-service
     restart: always
 
   crawler-service:
@@ -52,22 +42,24 @@ services:
       POSTGRES_SERVER: ${POSTGRES_SERVER}
       SECRET_KEY: ${SECRET_KEY}
     restart: always
-    ports:
-      - "8000:8000"
-    # TODO
-    #command: gunicorn crawler.asgi:application  -b 0.0.0.0:8000 -w 4 -k uvicorn.workers.UvicornWorker
-    command: python /visible/manage.py runserver 0.0.0.0:8000
+    command: gunicorn crawler.asgi:application  -b 0.0.0.0:8000 -w 4 -k uvicorn.workers.UvicornWorker
     depends_on:
       - postgres
-      # - migration
-    # TODO
+      - migration
+
+  migration:
+    image: crawler-service-migration
+    build:
+      context: ./crawler_service
+    command: python /visible/manage.py migrate --noinput
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_SERVER: ${POSTGRES_SERVER}
+      SECRET_KEY: ${SECRET_KEY}
+    restart: on-failure
     volumes:
       - ./crawler_service/crawler:/visible/crawler
-  
-  # migration:
-  #   image: crawler-service
-  #   command: python /visible/manage.py migrate --noinput
-  #   volumes:
-  #     - ./crawler_service/crawler:/visible/crawler
-  #   depends_on:
-  #     - postgres
+    depends_on:
+      - postgres

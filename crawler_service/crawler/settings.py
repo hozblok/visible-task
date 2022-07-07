@@ -26,10 +26,8 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("MODE", "DEVELOPMENT") == "DEVELOPMENT"
-CORS_ORIGIN_ALLOW_ALL = DEBUG
 
-# TODO: Disabled as part of a test home task.
-ALLOWED_HOSTS: list[str] = ["*"]
+ALLOWED_HOSTS: list[str] = ["crawler-service"]
 
 
 # Application definition
@@ -41,17 +39,14 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
-    "django.contrib.staticfiles",
-    "corsheaders",
+    "django.contrib.staticfiles"
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    # TODO: delete me
-    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
-    # TODO: Disabled as part of a test home task.
+    # TODO: Disabled as part of a test home task. Not supported on GUI.
     # "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",

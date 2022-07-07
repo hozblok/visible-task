@@ -1,13 +1,6 @@
 version: "3"
 
 services:
-  mysql:
-    ports: ["3306:3306"]
-  rabbitmq:
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-
   crawler-service-test:
     image: crawler-service
     container_name: crawler-service-test
@@ -24,9 +17,9 @@ services:
       RABBITMQ_HOST: ${RABBITMQ_HOST}
     restart: always
     ports: [ "8000:8000" ]
-    command: python -m uvicorn main:api --workers=2 --host 0.0.0.0 --port 8000
+    command: python /visible/manage.py runserver 0.0.0.0:8000
     depends_on:
       - postgres
       - rabbitmq
     volumes:
-      - ./crawler_service:/visible
+      - ./crawler_service/crawler:/visible/crawler

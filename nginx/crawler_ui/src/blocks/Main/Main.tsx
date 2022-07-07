@@ -44,7 +44,7 @@ const isValidHttpUrl = (str: string) => {
 const createJob = async (url: string) => {
     try {
         const res = await axios.post<{ url: string }, AxiosResponse<{ created: string; job_id: number }>>(
-            'http://localhost:8080/api/parse/',
+            '/api/parse/',
             { url }
         );
         return res.data;
@@ -68,8 +68,7 @@ const poolJob = async (currentJobId: object, job_id: number, delay = 2000, max =
             return null;
         }
         try {
-            const res = await axios.get<{jobs: IResult[]}>(`http://localhost:8080/api/jobs/${job_id}/`);
-            console.log('@@@', res)
+            const res = await axios.get<{jobs: IResult[]}>(`/api/jobs/${job_id}/`);
             if (![EStatus.DONE, EStatus.ERROR].includes(res.data.jobs[0]?.status)) {
                 await sleep(delay);
                 max -= delay;
@@ -92,7 +91,7 @@ export default function Main(props: Record<string, never>) {
     const [result, setResult] = useState<null | IResult>(null);
 
     const notFinished = result == null || [EStatus.IN_PROGRESS, EStatus.SUBMITTED].includes(result.status);
-    const done = result?.status === EStatus.DONE;
+    const finished = !notFinished;
 
     return (
         <fieldset>
@@ -129,7 +128,6 @@ export default function Main(props: Record<string, never>) {
                             ACTUAL_JOB_ID = currentJobId;
                             setCurrentJob({ url: urlValue, id: null });
                             setResult(null);
-                            console.log('@@@0')
                             createJob(urlValue).then(res => {
                                 if (ACTUAL_JOB_ID !== currentJobId) {
                                     // Outdated request. Do nothing.
@@ -139,11 +137,8 @@ export default function Main(props: Record<string, never>) {
                                     url: urlValue,
                                     id: res?.job_id ?? null,
                                 });
-                                console.log('@@@1', res)
                                 if (res?.job_id) {
-                                    console.log('@@@2')
                                     poolJob(currentJobId, res?.job_id).then(data => {
-                                        console.log('@@@3', data?.result)
                                         if (data != null) {
                                             setResult(data);
                                         }
@@ -159,13 +154,13 @@ export default function Main(props: Record<string, never>) {
             {currentJob !== null && notFinished && (
                 <>
                     <hr />
-                    <strong>{currentJob.url} hyperlinks:</strong>
+                    <strong id="result-title">{currentJob.url} hyperlinks:</strong>
                     <p>
                         <div className="lds-dual-ring"></div>
                     </p>
                 </>
             )}
-            {currentJob !== null && done && (
+            {currentJob !== null && finished && (
                 <>
                     <hr />
                     <strong>{urlValue}</strong>
