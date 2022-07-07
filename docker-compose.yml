@@ -18,11 +18,11 @@ services:
     image: nginx
     container_name: nginx
     build:
-      context: ./nignx
+      context: ./nginx
     volumes:
       - ./nginx/templates:/etc/nginx/templates
       # TODO: Delete me after adding a build process inside this container.
-      - ./nginx/crawler_ui/build:/app
+      # - ./nginx/crawler_ui/build:/app
     ports: [ "8080:80" ]
     environment:
       NGINX_PORT: "80"

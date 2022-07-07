@@ -163,7 +163,7 @@ export default function Main(props: Record<string, never>) {
             {currentJob !== null && finished && (
                 <>
                     <hr />
-                    <strong>{urlValue}</strong>
+                    <strong id="result-title">{currentJob.url} hyperlinks:</strong>
                     <pre id='pre-block'>
                         {result.result.error && `ОШИБКА: ${result.result.error}`}
                         <ol>

@@ -8,8 +8,7 @@
 # testing
 /coverage
 
-# TODO: uncomment me. Add autobuilding in docker containers.
-# /build
+/build
 
 # misc
 .DS_Store
